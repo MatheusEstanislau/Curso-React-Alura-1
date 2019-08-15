@@ -1,34 +1,68 @@
 import React, { Component } from 'react';
 import './css/pure-min.css';
 import './css/side-menu.css';
+import $ from 'jquery';
 
 class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {lista: []};
+  }
+  
+  componentDidMount() {
+   $.ajax({
+     //java -Dspring.datasource.password=MINHASENHA -jar cdcreact-1.0.0-SNAPSHOT.jar
+     url:"http://localhost:8080/api/autores",
+     dataType: 'json',
+     success:function(resposta){
+       this.setState = {lista:resposta};
+     }.bind(this)
+   }); 
+  }  
+
+  enviaForm(evento){
+    evento.preventDefault();
+    $.ajax({
+      url:"http://localhost:8080/api/autores",
+      contentType: 'application/json',
+      dataType: 'json',
+      type: 'post',
+      data: JSON.stringify({nome:"",email:'',senha:''}),
+      success: function(resposta){
+        console.log("enviado com sucesso");
+      },
+      error: function(resposta){
+        console.log("erro");
+      }
+    })
+    console.log("dados sendo enviados");
+  }
 
   render() {
     return (
       <div id="layout">
-          <a href="#menu" id="menuLink" class="menu-link">
+          <a href="#menu" id="menuLink" className="menu-link">
               <span></span>
           </a>
           <div id="menu">
-              <div class="pure-menu">
-                  <a class="pure-menu-heading" href="#">Company</a>
+              <div className="pure-menu">
+                  <a className="pure-menu-heading" href="#">Company</a>
 
-                  <ul class="pure-menu-list">
-                      <li class="pure-menu-item"><a href="#" class="pure-menu-link">Home</a></li>
-                      <li class="pure-menu-item"><a href="#" class="pure-menu-link">Autor</a></li>
-                      <li class="pure-menu-item"><a href="#" class="pure-menu-link">Livro</a></li>
+                  <ul className="pure-menu-list">
+                      <li className="pure-menu-item"><a href="#" className="pure-menu-link">Home</a></li>
+                      <li className="pure-menu-item"><a href="#" className="pure-menu-link">Autor</a></li>
+                      <li className="pure-menu-item"><a href="#" className="pure-menu-link">Livro</a></li>
                   </ul>
               </div>
           </div>
 
           <div id="main">
-              <div class="header">
+              <div className="header">
                   <h1>Cadastro de Autor</h1>
               </div>
               <div className="content" id="content">
               <div className="pure-form pure-form-aligned">
-                <form className="pure-form pure-form-aligned">
+                <form className="pure-form pure-form-aligned" onSubmit={this.enviaForm} method="post">
                   <div className="pure-control-group">
                     <label htmlFor="nome">Nome</label>
                     <input id="nome" type="text" name="nome" value=""  />
@@ -57,10 +91,16 @@ class App extends Component {
                     </tr>
                   </thead>
                   <tbody>
-                    <tr>
-                      <td>Alberto</td>
-                      <td>alberto.souza@caelum.com.br</td>
-                    </tr>
+                    {
+                      this.state.lista.map(function(autor){
+                        return(
+                          <tr key={autor.id}>
+                            <td>{autor.nome}</td>
+                            <td>{autor.email}</td>
+                          </tr>
+                        );
+                      })
+                    }
                   </tbody>
                 </table>
               </div>
