@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import './css/pure-min.css';
 import './css/side-menu.css';
-import AutorBox from './Autor.js';
 import { Link } from 'react-router-dom';
+import LivroBox from './Livro';
 
 class Livro extends Component {
 	render() {
@@ -28,11 +28,8 @@ class Livro extends Component {
 					</div>
 				</div>
 				<div id="main">
-					<div className="header">
-						<h1>Cadastro de Livros</h1>
-					</div>
 					<div className="content" id="content">
-
+						<LivroBox/>
 					</div>
 				</div>
 			</div>
