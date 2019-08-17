@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import PubSub from 'pubsub-js';
-import { isTSMethodSignature } from '@babel/types';
 
 export default class InputCustomizado extends Component{
 
